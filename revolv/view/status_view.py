@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # ----------------------------------------------------------------------------------
 # Project: Revolv
-# File: revolv/vkiew/status_view.py
+# File: revolv/view/status_view.py
 # ----------------------------------------------------------------------------------
 # Purpose:
 # This file contains the StatusView class, which is responsible for displaying

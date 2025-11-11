@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # ----------------------------------------------------------------------------------
 # Project: Revolv
-# File: revolv/vkiew/main_view.py
+# File: revolv/view/main_view.py
 # ----------------------------------------------------------------------------------
 # Purpose:
 # This is the main view of the Revolv application.
