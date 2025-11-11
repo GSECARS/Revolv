@@ -26,7 +26,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------------
 
-from qtpy.QtWidgets import QFrame, QPushButton, QVBoxLayout
+from gsewidgets import SimpleButton
+from qtpy.QtCore import QSize
+from qtpy.QtWidgets import QFrame, QVBoxLayout
 
 
 class ControlView(QFrame):
@@ -36,7 +38,7 @@ class ControlView(QFrame):
         super(ControlView, self).__init__()
 
         # Button
-        self.btn_collect_abort = QPushButton("Collect")
+        self.btn_collect_abort = SimpleButton("Collect", size=QSize(200, 70))
 
         # Layout
         self._layout()

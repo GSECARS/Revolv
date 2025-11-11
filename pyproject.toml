@@ -44,7 +44,7 @@ classifiers = [
 ]
 requires-python = "==3.14.*"
 dependencies = [
-    "gsewidgets==0.0.1",
+    "gsewidgets>=0.0.2",
     "pyqt6>=6.10.0",
     "pyshortcuts>=1.9.5",
     "qtpy>=2.4.3",

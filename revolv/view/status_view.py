@@ -26,14 +26,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------------
 
+from gsewidgets import Label, StatusLabel
 from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout
+from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
 
 class StatusView(QFrame):
     """This class is responsible for displaying the process status."""
 
-    update_status = Signal(str)
+    update_status = Signal(bool)
     update_frames = Signal(str)
     update_elapsed_time = Signal(str)
 
@@ -41,9 +42,9 @@ class StatusView(QFrame):
         super(StatusView, self).__init__()
 
         # Labels
-        self.lbl_status = QLabel("Idle")
-        self.lbl_frames = QLabel("Frames: 0/0")
-        self.lbl_elapsed_time = QLabel("Elapsed Time: 00:00:00")
+        self._lbl_status = StatusLabel(text="Idle", on_status="Running", off_status="Idle")
+        self._lbl_frames = Label("Frames: 0/0")
+        self._lbl_elapsed_time = Label("Elapsed Time: 00:00:00")
 
         # Connect signals to slots
         self.update_status.connect(self._update_status_label)
@@ -55,24 +56,24 @@ class StatusView(QFrame):
 
     def _update_status_label(self) -> None:
         """Updates the status label."""
-        self.lbl_status.setText(self.update_status)
+        self._lbl_status.status(self.update_status)
 
     def _update_frames_label(self) -> None:
         """Updates the frames label."""
-        self.lbl_frames.setText(self.update_frames)
+        self._lbl_frames.setText(self.update_frames)
 
     def _update_elapsed_time_label(self) -> None:
         """Updates the elapsed time label."""
-        self.lbl_elapsed_time.setText(self.update_elapsed_time)
+        self._lbl_elapsed_time.setText(self.update_elapsed_time)
 
     def _layout(self) -> None:
         """Sets up the layout of the status view."""
         layout = QHBoxLayout()
-        layout.addWidget(self.lbl_status)
+        layout.addWidget(self._lbl_status)
 
         vertical_layout = QVBoxLayout()
-        vertical_layout.addWidget(self.lbl_frames)
-        vertical_layout.addWidget(self.lbl_elapsed_time)
+        vertical_layout.addWidget(self._lbl_frames)
+        vertical_layout.addWidget(self._lbl_elapsed_time)
 
         layout.addLayout(vertical_layout)
 

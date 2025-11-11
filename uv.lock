@@ -29,15 +29,15 @@ wheels = [
 
 [[package]]
 name = "gsewidgets"
-version = "0.0.1"
+version = "0.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyqt6" },
     { name = "qtpy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b9/ba/2a5822a98317726aa173b4b32a17b5e3262319cf67b404b813c7ec75a05d/GSEWidgets-0.0.1.tar.gz", hash = "sha256:2985a4f2a87654d08b3bb40035018354c908a89a40d6c45cab9487b5b9acc75e", size = 46313, upload-time = "2022-10-25T23:24:31.131Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a4/3e/455aefd15b4a0fb1b350eef986c914ede8fc2f4aab88fdda0bca5144399b/gsewidgets-0.0.2.tar.gz", hash = "sha256:7bc61664a52ab0a6cb7b5539da1d9ead8ae995e3049d065a5a91802a715aae66", size = 50344, upload-time = "2025-04-21T18:58:35.867Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1b/46/f85f8e95373f024a7ff7e1b00015f130bc092e75886da28e7b31171484b0/GSEWidgets-0.0.1-py3-none-any.whl", hash = "sha256:741206ef82d157725b8f3ccfa65ffcc14866cc457814d504d29fcffb1405924d", size = 42125, upload-time = "2022-10-25T23:24:29.053Z" },
+    { url = "https://files.pythonhosted.org/packages/cb/24/a6fb00eec1b43c48d61e06dbeb9770e1f6f69bb70d4ce17d57640937f78c/gsewidgets-0.0.2-py3-none-any.whl", hash = "sha256:1a670afaf334b9af1876dee58bd0c2087b7af6046fc31172efc40b3dacac5e90", size = 50701, upload-time = "2025-04-21T18:58:34.566Z" },
 ]
 
 [[package]]
@@ -147,7 +147,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "gsewidgets", specifier = "==0.0.1" },
+    { name = "gsewidgets", specifier = ">=0.0.2" },
     { name = "pyqt6", specifier = ">=6.10.0" },
     { name = "pyshortcuts", specifier = ">=1.9.5" },
     { name = "qtpy", specifier = ">=2.4.3" },
