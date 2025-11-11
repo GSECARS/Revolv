@@ -26,9 +26,30 @@
 # ----------------------------------------------------------------------------------
 
 import argparse
+import shutil
 from importlib.metadata import version
+from pathlib import Path
+
+from pyshortcuts import make_shortcut
 
 from revolv.controller import MainController
+
+
+def make_icon() -> None:
+    """Creates a desktop shortcut icon for the application."""
+    print("Creating desktop shortcut...")
+
+    # Find the path to the main script
+    revolv_script = shutil.which("revolv")
+    if not revolv_script:
+        raise FileNotFoundError("Could not find the 'revolv' script in PATH.")
+
+    # Get the package directory to find the icon
+    package_dir = Path(__file__).parent.parent
+    revolv_icon = str(package_dir / "icons" / "revolv_icon.png")
+
+    # Create the shortcut using pyshortcuts
+    make_shortcut(script=revolv_script, name="Revolv", icon=revolv_icon, terminal=False)
 
 
 def main() -> None:
@@ -40,7 +61,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.make_icon:
-        pass
+        make_icon()
     elif args.gui:
         MainController().run(version("revolv"))
     else:
