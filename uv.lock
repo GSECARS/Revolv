@@ -28,6 +28,19 @@ wheels = [
 ]
 
 [[package]]
+name = "gsewidgets"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyqt6" },
+    { name = "qtpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b9/ba/2a5822a98317726aa173b4b32a17b5e3262319cf67b404b813c7ec75a05d/GSEWidgets-0.0.1.tar.gz", hash = "sha256:2985a4f2a87654d08b3bb40035018354c908a89a40d6c45cab9487b5b9acc75e", size = 46313, upload-time = "2022-10-25T23:24:31.131Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1b/46/f85f8e95373f024a7ff7e1b00015f130bc092e75886da28e7b31171484b0/GSEWidgets-0.0.1-py3-none-any.whl", hash = "sha256:741206ef82d157725b8f3ccfa65ffcc14866cc457814d504d29fcffb1405924d", size = 42125, upload-time = "2022-10-25T23:24:29.053Z" },
+]
+
+[[package]]
 name = "packaging"
 version = "25.0"
 source = { registry = "https://pypi.org/simple" }
@@ -120,6 +133,7 @@ name = "revolv"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "gsewidgets" },
     { name = "pyqt6" },
     { name = "pyshortcuts" },
     { name = "qtpy" },
@@ -133,6 +147,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "gsewidgets", specifier = "==0.0.1" },
     { name = "pyqt6", specifier = ">=6.10.0" },
     { name = "pyshortcuts", specifier = ">=1.9.5" },
     { name = "qtpy", specifier = ">=2.4.3" },
