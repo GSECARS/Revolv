@@ -26,8 +26,9 @@
 # ----------------------------------------------------------------------------------
 
 from qtpy.QtGui import QCloseEvent
-from qtpy.QtWidgets import QFrame, QMainWindow, QMessageBox, QVBoxLayout
+from qtpy.QtWidgets import QFrame, QHBoxLayout, QMainWindow, QMessageBox, QVBoxLayout
 
+from revolv.view.control_view import ControlView
 from revolv.view.status_view import StatusView
 
 
@@ -38,6 +39,7 @@ class MainView(QMainWindow):
         super(MainView, self).__init__()
 
         # Create the views
+        self.control_view = ControlView()
         self.status_view = StatusView()
 
         # Helper variables
@@ -58,7 +60,13 @@ class MainView(QMainWindow):
         """Layouts the main view."""
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self.status_view)
+
+        bottom_layout = QHBoxLayout()
+        bottom_layout.setContentsMargins(0, 0, 0, 0)
+        bottom_layout.addWidget(self.status_view)
+        bottom_layout.addWidget(self.control_view)
+
+        layout.addLayout(bottom_layout)
 
         self._main_frame.setLayout(layout)
 
