@@ -26,7 +26,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------------
 
+from revolv.model.epics_model import EpicsConfig
 from revolv.model.main_model import MainModel
 from revolv.model.qt_worker_model import QtWorkerModel
 
-__all__ = ["MainModel", "QtWorkerModel"]
+__all__ = ["MainModel", "QtWorkerModel", "EpicsConfig"]

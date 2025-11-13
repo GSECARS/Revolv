@@ -26,9 +26,16 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------------
 
+from dataclasses import dataclass, field
 
+from revolv.model.epics_model import EpicsModel
+
+
+@dataclass
 class MainModel:
     """This class is responsible for the main model of the application."""
 
+    epics: EpicsModel = field(init=False, repr=False, compare=False)
+
     def __init__(self) -> None:
-        pass
+        object.__setattr__(self, "epics", EpicsModel())

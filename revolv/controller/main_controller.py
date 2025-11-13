@@ -60,7 +60,12 @@ class MainController:
         # Run the conversion process
         while not self._view.terminated:
             print("Worker is running...")
-            time.sleep(0.1)
+            time.sleep(0.05)
+
+        # Clear camonitor instances after exiting the loop
+        for pv in self._model.epics.pvs:
+            pv.moving = False
+            del pv
 
         # Set as finished so the GUI can exit
         self._view.worker_finished = True
