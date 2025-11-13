@@ -49,7 +49,7 @@ def make_icon() -> None:
     revolv_icon = str(package_dir / "icons" / "revolv_icon.png")
 
     # Create the shortcut using pyshortcuts
-    make_shortcut(script=revolv_script, name="Revolv", icon=revolv_icon, terminal=False)
+    make_shortcut(script=f"{revolv_script} -g", name="Revolv", icon=revolv_icon, terminal=False)
 
 
 def main() -> None:
