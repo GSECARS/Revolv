@@ -111,7 +111,7 @@ class ScanningController(QObject):
         return False
 
     def _collect_abort_btn(self) -> None:
-        if self._view.control_view.btn_collect_abort.text() == "Collect":
+        if not self._model.scanning.is_running:
             exposure = self._view.setup_view.input_exposure.value()
             start = self._view.setup_view.input_start.value()
             end = self._view.setup_view.input_end.value()
