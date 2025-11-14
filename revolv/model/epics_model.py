@@ -52,9 +52,9 @@ class EpicsConnectionError(Exception):
 class EpicsConfig(Enum):
     """Empty Enum to be populated with PVs"""
 
-    ds_mirror = "13IDD:m103.VAL"
-    us_mirror = "13IDD:m102.VAL"
-    horizontal = "13IDD:m98.VAL"
+    ds_mirror = "13IDD:m103"
+    us_mirror = "13IDD:m102"
+    horizontal = "13IDD:m98"
     stop_pvs = ["13IDD:Auto1:allstop.VAL", "13IDD_Linux:allstop.VAL", "13IDD_DAC_XPS16:allstop.VAL"]
 
 

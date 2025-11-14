@@ -26,45 +26,35 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------------
 
-from gsewidgets import Label, StatusLabel
-from qtpy.QtCore import Signal
+from gsewidgets import Label
 from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
 
 class StatusView(QFrame):
     """This class is responsible for displaying the process status."""
 
-    update_status = Signal(bool)
-    update_frames = Signal(str)
-    update_elapsed_time = Signal(str)
-
     def __init__(self) -> None:
         super(StatusView, self).__init__()
 
         # Labels
-        self._lbl_status = StatusLabel(text="Idle", on_status="Running", off_status="Idle")
-        self._lbl_frames = Label("Frames: 0/0")
-        self._lbl_elapsed_time = Label("Elapsed Time: 00:00:00")
-
-        # Connect signals to slots
-        self.update_status.connect(self._update_status_label)
-        self.update_frames.connect(self._update_frames_label)
-        self.update_elapsed_time.connect(self._update_elapsed_time_label)
+        self._lbl_status = Label(text="Idle", object_name="lbl-status")
+        self._lbl_frames = Label("0/0")
+        self._lbl_elapsed_time = Label("00:00:00")
 
         # Layout
         self._layout()
 
-    def _update_status_label(self) -> None:
+    def update_status_label(self, status_message) -> None:
         """Updates the status label."""
-        self._lbl_status.status(self.update_status)
+        self._lbl_status.setText(status_message)
 
-    def _update_frames_label(self) -> None:
+    def update_frames_label(self, frames) -> None:
         """Updates the frames label."""
-        self._lbl_frames.setText(self.update_frames)
+        self._lbl_frames.setText(frames)
 
-    def _update_elapsed_time_label(self) -> None:
+    def update_elapsed_time_label(self, elapsed_time) -> None:
         """Updates the elapsed time label."""
-        self._lbl_elapsed_time.setText(self.update_elapsed_time)
+        self._lbl_elapsed_time.setText(elapsed_time)
 
     def _layout(self) -> None:
         """Sets up the layout of the status view."""

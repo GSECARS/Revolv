@@ -46,7 +46,7 @@ def make_icon() -> None:
 
     # Get the package directory to find the icon
     package_dir = Path(__file__).parent.parent
-    revolv_icon = str(package_dir / "icons" / "revolv_icon.png")
+    revolv_icon = str(package_dir / "assets" / "icons" / "revolv.png")
 
     # Create the shortcut using pyshortcuts
     make_shortcut(script=f"{revolv_script} -g", name="Revolv", icon=revolv_icon, terminal=False)

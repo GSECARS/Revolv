@@ -30,6 +30,7 @@ import time
 
 from qtpy.QtWidgets import QApplication
 
+from revolv.controller.scanning_controller import ScanningController
 from revolv.model import MainModel, QtWorkerModel
 from revolv.view import MainView
 
@@ -39,8 +40,11 @@ class MainController:
 
     def __init__(self) -> None:
         self._app = QApplication(sys.argv)
-        self._view = MainView()
         self._model = MainModel()
+        self._view = MainView(paths=self._model.paths)
+
+        # Controllers
+        self._scanning_controller = ScanningController(self._model, self._view)
 
         # Initialize the Qt worker model
         self._worker_model = QtWorkerModel(self._worker_methods, ())
@@ -59,7 +63,6 @@ class MainController:
 
         # Run the conversion process
         while not self._view.terminated:
-            print("Worker is running...")
             time.sleep(0.05)
 
         # Clear camonitor instances after exiting the loop

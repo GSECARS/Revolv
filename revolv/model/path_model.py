@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 # ----------------------------------------------------------------------------------
 # Project: Revolv
-# File: revolv/model/main_model.py
+# File: revolv/model/path_model.py
 # ----------------------------------------------------------------------------------
 # Purpose:
-# This is the main model of the Revolv GUI. It is responsible for
-# setting up the main model that handles the conversion process.
+# This file contains the PathModel class, which is responsible for holding the paths
+# for the assets directories in the Revolv application.
 # ----------------------------------------------------------------------------------
 # Author: Christofanis Skordas
 #
@@ -27,21 +27,28 @@
 # ----------------------------------------------------------------------------------
 
 from dataclasses import dataclass, field
-
-from revolv.model.epics_model import EpicsModel
-from revolv.model.path_model import PathModel
-from revolv.model.scanning_model import ScanningModel
+from pathlib import Path
 
 
-@dataclass
-class MainModel:
-    """This class is responsible for the main model of the application."""
+@dataclass(frozen=True)
+class PathModel:
+    """
+    Model that holds the paths for the assets directories.
+    """
 
-    epics: EpicsModel = field(init=False, repr=False, compare=False)
-    scanning: ScanningModel = field(init=False, repr=False, compare=False)
-    paths: PathModel = field(init=False, repr=False, compare=False)
+    _assets_path: str = field(init=False, compare=False, repr=False)
+    _icon_path: str = field(init=False, compare=False, repr=False)
+    _qss_path: str = field(init=False, compare=False, repr=False)
 
-    def __init__(self) -> None:
-        object.__setattr__(self, "epics", EpicsModel())
-        object.__setattr__(self, "scanning", ScanningModel())
-        object.__setattr__(self, "paths", PathModel())
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "_assets_path", Path(__file__).parent.parent.parent / "revolv" / "assets")
+        object.__setattr__(self, "_icon_path", self._assets_path / "icons")
+        object.__setattr__(self, "_qss_path", self._assets_path / "qss")
+
+    @property
+    def icon_path(self) -> str:
+        return self._icon_path
+
+    @property
+    def qss_path(self) -> str:
+        return self._qss_path

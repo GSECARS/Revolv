@@ -70,7 +70,7 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["revolv"]
 include = [
-  "/revolv/icons/revolv.png"
+  "/revolv/assets/icons/revolv.png"
 ]
 
 [tool.ruff]

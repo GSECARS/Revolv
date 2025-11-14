@@ -25,9 +25,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------------
 
-from qtpy.QtGui import QCloseEvent
+from pathlib import Path
+
+from qtpy.QtGui import QCloseEvent, QIcon
 from qtpy.QtWidgets import QFrame, QHBoxLayout, QMainWindow, QMessageBox, QVBoxLayout
 
+from revolv.model.path_model import PathModel
 from revolv.view.control_view import ControlView
 from revolv.view.setup_view import SetupView
 from revolv.view.status_view import StatusView
@@ -36,8 +39,11 @@ from revolv.view.status_view import StatusView
 class MainView(QMainWindow):
     """This class is responsible for the main view of the application."""
 
-    def __init__(self) -> None:
+    def __init__(self, paths: PathModel) -> None:
         super(MainView, self).__init__()
+
+        # Store paths
+        self._paths = paths
 
         # Create the views
         self.setup_view = SetupView()
@@ -57,6 +63,12 @@ class MainView(QMainWindow):
         # Main frame
         self._main_frame = QFrame()
         self.setCentralWidget(self._main_frame)
+
+        # Set the icon
+        self.setWindowIcon(QIcon(str(Path(self._paths.icon_path) / "revolv.png")))
+
+        # Load qss
+        self.setStyleSheet(open(str(Path(self._paths.qss_path) / "main.qss"), "r").read())
 
     def _layout(self) -> None:
         """Layouts the main view."""
