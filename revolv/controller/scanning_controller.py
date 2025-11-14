@@ -37,6 +37,7 @@ from revolv.view import MainView
 
 class ScanningController(QObject):
     frame_changed: Signal = Signal(str)
+    elapsed_time_changed: Signal = Signal(str)
 
     def __init__(self, model: MainModel, view: MainView) -> None:
         super(ScanningController, self).__init__()
@@ -47,6 +48,7 @@ class ScanningController(QObject):
         self._horiz_traj = None
         self._ds_traj = None
         self._us_traj = None
+        self._start_time = None
 
         self.setup_trajectories()
         self._connect_methods()
@@ -60,6 +62,7 @@ class ScanningController(QObject):
         self._view.setup_view.input_step_size.valueChanged.connect(self.setup_trajectories)
         self._view.setup_view.drop_laser_type.currentIndexChanged.connect(self.laser_type_changed)
         self.frame_changed.connect(self._view.status_view.update_frames_label)
+        self.elapsed_time_changed.connect(self._view.status_view.update_elapsed_time_label)
 
         self._view.control_view.btn_collect_abort.clicked.connect(self._collect_abort_btn)
 
@@ -67,6 +70,15 @@ class ScanningController(QObject):
 
     def _disable_gui_while_collecting(self, state: bool) -> None:
         self._view.setup_view.toggle_visibility(state)
+
+    def _update_elapsed_time(self) -> None:
+        """Calculate and emit elapsed time."""
+        if self._start_time is not None:
+            elapsed = time.time() - self._start_time
+            hours = int(elapsed // 3600)
+            minutes = int((elapsed % 3600) // 60)
+            seconds = int(elapsed % 60)
+            self.elapsed_time_changed.emit(f"{hours:02d}:{minutes:02d}:{seconds:02d}")
 
     def _check_limits(self) -> bool:
         """Check if trajectory positions exceed motor limits."""
@@ -130,6 +142,9 @@ class ScanningController(QObject):
         self._model.scanning.is_running = True
         self._model.scanning.status_message_changed.emit("Preparing")
 
+        # Start timing
+        self._start_time = time.time()
+
         # Check for limit violations
         limited = self._check_limits()
         if limited:
@@ -150,6 +165,7 @@ class ScanningController(QObject):
                     print(f"Moving horiz to {horiz_pos}, ds to {ds_pos}")
                     time.sleep(exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
+                    self._update_elapsed_time()
 
         elif self._us_traj is not None and self._ds_traj is None:
             for i in range(num_frames):
@@ -159,6 +175,7 @@ class ScanningController(QObject):
                     print(f"Moving horiz to {horiz_pos}, us to {us_pos}")
                     time.sleep(exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
+                    self._update_elapsed_time()
         else:
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
@@ -168,6 +185,7 @@ class ScanningController(QObject):
                     print(f"Moving horiz to {horiz_pos}, us to {us_pos}, ds to {ds_pos}")
                     time.sleep(exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
+                    self._update_elapsed_time()
 
         time.sleep(0.5)
 
@@ -221,4 +239,6 @@ class ScanningController(QObject):
 
     def abort(self) -> None:
         self._model.scanning.aborted = True
-        self._model.scanning.status_message_changed.emit("Aborted")
+        self._model.scanning.status_message_changed.emit("Aborting")
+        # Reset timer
+        self.elapsed_time_changed.emit("00:00:00")
