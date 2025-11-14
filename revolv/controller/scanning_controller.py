@@ -136,7 +136,7 @@ class ScanningController(QObject):
     def acquire_data(self) -> None:
         # Collect
         caput(EpicsConfig["detector_acquire"].value, 1, wait=True)
-        while caget(EpicsConfig["detector_acquire"].value):
+        while caget(EpicsConfig["detector_armed"].value):
             time.sleep(0.1)
             continue
 
