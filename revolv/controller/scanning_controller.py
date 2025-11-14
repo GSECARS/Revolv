@@ -195,7 +195,7 @@ class ScanningController(QObject):
         else:
             # Move to start positions
             caput_many(
-                [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value, EpicsConfig["ds_mirror"]],
+                [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value, EpicsConfig["ds_mirror"].value],
                 [self._horiz_traj.trj_array[0], self._us_traj.trj_array[0], self._ds_traj.trj_array[0]],
                 wait=True,
             )
@@ -204,7 +204,7 @@ class ScanningController(QObject):
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
                     caput_many(
-                        [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value, EpicsConfig["ds_mirror"]],
+                        [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value, EpicsConfig["ds_mirror"].value],
                         [self._horiz_traj.trj_array[i], self._us_traj.trj_array[i], self._ds_traj.trj_array[i]],
                         wait=True,
                     )
