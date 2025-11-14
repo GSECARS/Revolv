@@ -180,4 +180,3 @@ class ScanningController(QObject):
     def abort(self) -> None:
         self._model.scanning.aborted = True
         self._model.scanning.status_message_changed.emit("Aborted")
-        self._model.scanning.scan_is_running.emit(False)
