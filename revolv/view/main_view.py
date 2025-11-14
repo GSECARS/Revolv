@@ -64,6 +64,9 @@ class MainView(QMainWindow):
         self._main_frame = QFrame()
         self.setCentralWidget(self._main_frame)
 
+        # Set window size
+        self.setFixedSize(450, 200)
+
         # Set the icon
         self.setWindowIcon(QIcon(str(Path(self._paths.icon_path) / "revolv.png")))
 
