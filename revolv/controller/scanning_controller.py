@@ -84,42 +84,59 @@ class ScanningController(QObject):
             self.abort()
             return None
 
-        limited = self._model.scanning.prepare_scan(start=start, end=end, exposure=exposure, step=step)
+        self._model.scanning.scan_is_running.emit(True)
+        self._model.scanning.is_running = True
+        self._model.scanning.status_message_changed.emit("Preparing")
+
+        limited = False
+        # TODO: Check for limit violations here
         if limited:
             self.abort()
             return None
 
         # Start collection
-        self._model.scanning.collect(start, end, exposure, step)
+        self._model.scanning.status_message_changed.emit("Scanning")
 
         # Number of frames
         num_frames = len(self._horiz_traj.trj_array)
 
         if self._ds_traj is not None and self._us_traj is None:
             for i in range(num_frames):
-                horiz_pos = self._horiz_traj.trj_array[i]
-                ds_pos = self._ds_traj.trj_array[i]
-                print(f"Moving horiz to {horiz_pos}, ds to {ds_pos}")
-                time.sleep(exposure)
-                self.frame_changed.emit(f"{i + 1}/{num_frames}")
+                if not self._model.scanning.aborted:
+                    horiz_pos = self._horiz_traj.trj_array[i]
+                    ds_pos = self._ds_traj.trj_array[i]
+                    print(f"Moving horiz to {horiz_pos}, ds to {ds_pos}")
+                    time.sleep(exposure)
+                    self.frame_changed.emit(f"{i + 1}/{num_frames}")
 
         elif self._us_traj is not None and self._ds_traj is None:
             for i in range(num_frames):
-                horiz_pos = self._horiz_traj.trj_array[i]
-                us_pos = self._us_traj.trj_array[i]
-                print(f"Moving horiz to {horiz_pos}, us to {us_pos}")
-                time.sleep(exposure)
-                self.frame_changed.emit(f"{i + 1}/{num_frames}")
+                if not self._model.scanning.aborted:
+                    horiz_pos = self._horiz_traj.trj_array[i]
+                    us_pos = self._us_traj.trj_array[i]
+                    print(f"Moving horiz to {horiz_pos}, us to {us_pos}")
+                    time.sleep(exposure)
+                    self.frame_changed.emit(f"{i + 1}/{num_frames}")
         else:
             for i in range(num_frames):
-                horiz_pos = self._horiz_traj.trj_array[i]
-                us_pos = self._us_traj.trj_array[i]
-                ds_pos = self._ds_traj.trj_array[i]
-                print(f"Moving horiz to {horiz_pos}, us to {us_pos}, ds to {ds_pos}")
-                time.sleep(exposure)
-                self.frame_changed.emit(f"{i + 1}/{num_frames}")
+                if not self._model.scanning.aborted:
+                    horiz_pos = self._horiz_traj.trj_array[i]
+                    us_pos = self._us_traj.trj_array[i]
+                    ds_pos = self._ds_traj.trj_array[i]
+                    print(f"Moving horiz to {horiz_pos}, us to {us_pos}, ds to {ds_pos}")
+                    time.sleep(exposure)
+                    self.frame_changed.emit(f"{i + 1}/{num_frames}")
 
         time.sleep(0.5)
+
+        # Finish the scan after all steps complete
+        # Reset status values
+        self._model.scanning.aborted = False
+        # Change scan running status
+        self._model.scanning.scan_is_running.emit(False)
+        self._model.scanning.is_running = False
+        # Set finish scan message
+        self._model.scanning.status_message_changed.emit("Finished")
 
     def collect(self, exposure: float, start: float, end: float, step: float) -> None:
         step_scan = threading.Thread(target=self._collect_step, args=(exposure, start, end, step))

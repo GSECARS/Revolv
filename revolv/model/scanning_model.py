@@ -26,9 +26,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------------
 
-import time
-
-from epics import caget, caput
 from gsewidgets import ErrorMessageBox
 from qtpy.QtCore import QObject, Signal
 
@@ -43,15 +40,6 @@ class ScanningModel(QObject):
     _is_running: bool = False
     _aborted: bool = False
 
-    # Additional PVs
-    _detector_acquire: str = "13IDD:userStringSeq11.PROC"
-    _detector_acquire: str = "13EIG2_9M:cam1:Acquire"
-    _photodiode: str = "13IDD:Photodiode"
-
-    _start_position: float = None
-    _end_position: float = None
-    _exposure_time: float = None
-
     def __init__(self) -> None:
         super(ScanningModel, self).__init__()
 
@@ -59,50 +47,6 @@ class ScanningModel(QObject):
     def create_error_message(msg: str) -> None:
         print(f"[Generic-Error] - {msg}")
         ErrorMessageBox(msg=msg)
-
-    def prepare_scan(
-        self,
-        start: float,
-        end: float,
-        exposure: float,
-        step: float,
-    ) -> bool:
-        self.scan_is_running.emit(True)
-        self._is_running = True
-        self.status_message_changed.emit("Preparing")
-        # self._start_position = start
-        # self._end_position = end
-        # self._exposure_time = exposure
-
-        limited = False
-
-        # TODO: Check scan limits
-
-        return limited
-
-    def collect(
-        self,
-        start: float,
-        end: float,
-        exposure: float,
-        step: float,
-    ) -> None:
-        # Set the scan status to running
-        self.status_message_changed.emit("Scanning")
-
-        # Arm the detector
-        time.sleep(0.5)
-
-        self._finish_scan()
-
-    def _finish_scan(self) -> None:
-        # Reset status values
-        self._aborted = False
-        # Change scan running status
-        self.scan_is_running.emit(False)
-        self._is_running = False
-        # Set finish scan message
-        self.status_message_changed.emit("Finished")
 
     @property
     def is_running(self) -> bool:
