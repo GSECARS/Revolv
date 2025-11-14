@@ -30,7 +30,7 @@ QPushButton:pressed {
 }
 
 QLabel {
-    color: #323336;
+    color: #ffffff;
     font-size: 12px;
     font-family: "Calibri";
     font-weight: bold;

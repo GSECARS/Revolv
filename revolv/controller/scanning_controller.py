@@ -31,7 +31,7 @@ import time
 from epics import caget, caput
 from qtpy.QtCore import QObject, Signal
 
-from revolv.model import LineTrajectory, MainModel
+from revolv.model import EpicsConfig, LineTrajectory, MainModel
 from revolv.view import MainView
 
 
@@ -133,10 +133,9 @@ class ScanningController(QObject):
 
         laser_type = self._view.setup_view.drop_laser_type.currentText()
 
-        # TODO: Update with real positions
-        horiz = -1.5
-        us = 0.0
-        ds = 0.0
+        horiz = caget(EpicsConfig["horizontal"].value)
+        us = caget(EpicsConfig["us_mirror"].value)
+        ds = caget(EpicsConfig["ds_mirror"].value)
 
         if start is None or stop is None or step is None:
             return
