@@ -69,8 +69,8 @@ class EpicsModel:
     pvs: list[PVModel] = field(init=False, repr=False, compare=False, default_factory=lambda: [])
     _connected: bool = field(init=False, compare=False, repr=False, default=False)
 
-    # def __post_init__(self) -> None:
-    #     self._set_stages()
+    def __post_init__(self) -> None:
+        self._set_stages()
 
     def connect(self) -> None:
         """Check and set the connection status of all PVs included in the EpicsConfig."""

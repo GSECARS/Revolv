@@ -60,15 +60,6 @@ class ScanningModel(QObject):
         print(f"[Generic-Error] - {msg}")
         ErrorMessageBox(msg=msg)
 
-    def _wait_for_collection(self) -> None:
-        while not self._aborted:
-            if not caget(self._detector_acquire):
-                time.sleep(0.1)
-            continue
-
-        # Add delay
-        time.sleep(5)
-
     def prepare_scan(
         self,
         start: float,
@@ -102,7 +93,6 @@ class ScanningModel(QObject):
         # Arm the detector
         time.sleep(0.5)
 
-        self._wait_for_collection()
         self._finish_scan()
 
     def _finish_scan(self) -> None:

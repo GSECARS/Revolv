@@ -96,7 +96,7 @@ class ScanningController(QObject):
         num_frames = len(self._horiz_traj.trj_array)
 
         if self._ds_traj is not None and self._us_traj is None:
-            for i in len(self._horiz_traj.trj_array):
+            for i in range(num_frames):
                 horiz_pos = self._horiz_traj.trj_array[i]
                 ds_pos = self._ds_traj.trj_array[i]
                 print(f"Moving horiz to {horiz_pos}, ds to {ds_pos}")
@@ -104,14 +104,14 @@ class ScanningController(QObject):
                 self.frame_changed.emit(f"{i + 1}/{num_frames}")
 
         elif self._us_traj is not None and self._ds_traj is None:
-            for i in len(self._horiz_traj.trj_array):
+            for i in range(num_frames):
                 horiz_pos = self._horiz_traj.trj_array[i]
                 us_pos = self._us_traj.trj_array[i]
                 print(f"Moving horiz to {horiz_pos}, us to {us_pos}")
                 time.sleep(exposure)
                 self.frame_changed.emit(f"{i + 1}/{num_frames}")
         else:
-            for i in len(self._horiz_traj.trj_array):
+            for i in range(num_frames):
                 horiz_pos = self._horiz_traj.trj_array[i]
                 us_pos = self._us_traj.trj_array[i]
                 ds_pos = self._ds_traj.trj_array[i]
@@ -164,3 +164,4 @@ class ScanningController(QObject):
     def abort(self) -> None:
         self._model.scanning.aborted = True
         self._model.scanning.status_message_changed.emit("Aborted")
+        self._model.scanning.scan_is_running.emit(False)
