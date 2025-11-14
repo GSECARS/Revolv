@@ -68,6 +68,48 @@ class ScanningController(QObject):
     def _disable_gui_while_collecting(self, state: bool) -> None:
         self._view.setup_view.toggle_visibility(state)
 
+    def _check_limits(self) -> bool:
+        """Check if trajectory positions exceed motor limits."""
+        # Get motor limits
+        horiz_llm = caget(EpicsConfig["horizontal"].value + ".LLM")
+        horiz_hlm = caget(EpicsConfig["horizontal"].value + ".HLM")
+
+        # Check horizontal trajectory limits
+        if self._horiz_traj is not None:
+            horiz_min = min(self._horiz_traj.trj_array)
+            horiz_max = max(self._horiz_traj.trj_array)
+
+            if horiz_min < horiz_llm or horiz_max > horiz_hlm:
+                error_msg = f"Horizontal trajectory ({horiz_min:.4f} to {horiz_max:.4f}) exceeds limits ({horiz_llm:.4f} to {horiz_hlm:.4f})"
+                self._model.scanning.error_message_changed.emit(error_msg)
+                return True
+
+        # Check DS mirror limits if trajectory exists
+        if self._ds_traj is not None:
+            ds_llm = caget(EpicsConfig["ds_mirror"].value + ".LLM")
+            ds_hlm = caget(EpicsConfig["ds_mirror"].value + ".HLM")
+            ds_min = min(self._ds_traj.trj_array)
+            ds_max = max(self._ds_traj.trj_array)
+
+            if ds_min < ds_llm or ds_max > ds_hlm:
+                error_msg = f"DS mirror trajectory ({ds_min:.4f} to {ds_max:.4f}) exceeds limits ({ds_llm:.4f} to {ds_hlm:.4f})"
+                self._model.scanning.error_message_changed.emit(error_msg)
+                return True
+
+        # Check US mirror limits if trajectory exists
+        if self._us_traj is not None:
+            us_llm = caget(EpicsConfig["us_mirror"].value + ".LLM")
+            us_hlm = caget(EpicsConfig["us_mirror"].value + ".HLM")
+            us_min = min(self._us_traj.trj_array)
+            us_max = max(self._us_traj.trj_array)
+
+            if us_min < us_llm or us_max > us_hlm:
+                error_msg = f"US mirror trajectory ({us_min:.4f} to {us_max:.4f}) exceeds limits ({us_llm:.4f} to {us_hlm:.4f})"
+                self._model.scanning.error_message_changed.emit(error_msg)
+                return True
+
+        return False
+
     def _collect_abort_btn(self) -> None:
         if self._view.control_view.btn_collect_abort.text() == "Collect":
             exposure = self._view.setup_view.input_exposure.value()
@@ -88,8 +130,8 @@ class ScanningController(QObject):
         self._model.scanning.is_running = True
         self._model.scanning.status_message_changed.emit("Preparing")
 
-        limited = False
-        # TODO: Check for limit violations here
+        # Check for limit violations
+        limited = self._check_limits()
         if limited:
             self.abort()
             return None
