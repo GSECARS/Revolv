@@ -136,7 +136,9 @@ class ScanningController(QObject):
     def acquire_data(self) -> None:
         # Collect
         caput(EpicsConfig["detector_acquire"].value, 1, wait=True)
-        time.sleep(0.1)
+        while caget(EpicsConfig["detector_acquire"].value):
+            time.sleep(0.1)
+            continue
 
     def _collect_step(self, exposure: float, start: float, end: float, step: float) -> None:
         if self._horiz_traj is None:
