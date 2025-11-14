@@ -133,6 +133,11 @@ class ScanningController(QObject):
         else:
             self.abort()
 
+    def acquire_data(self) -> None:
+        # Collect
+        caput(EpicsConfig["detector_acquire"].value, 1, wait=True)
+        time.sleep(0.1)
+
     def _collect_step(self, exposure: float, start: float, end: float, step: float) -> None:
         if self._horiz_traj is None:
             self.abort()
@@ -151,6 +156,9 @@ class ScanningController(QObject):
             self.abort()
             return None
 
+        # Set exposure time
+        caput(EpicsConfig["detector_exposure"].value, exposure, wait=True)
+
         # Start collection
         self._model.scanning.status_message_changed.emit("Scanning")
 
@@ -158,11 +166,17 @@ class ScanningController(QObject):
         num_frames = len(self._horiz_traj.trj_array)
 
         if self._ds_traj is not None and self._us_traj is None:
+            current_horiz = caget(EpicsConfig["horizontal"].value)
+            current_ds = caget(EpicsConfig["ds_mirror"].value)
+
             # Move to start positions
             caput_many(
                 [EpicsConfig["horizontal"].value, EpicsConfig["ds_mirror"].value], [self._horiz_traj.trj_array[0], self._ds_traj.trj_array[0]], wait=True
             )
             time.sleep(0.2)
+
+            # Collect first step
+            self.acquire_data()
 
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
@@ -171,16 +185,24 @@ class ScanningController(QObject):
                         [self._horiz_traj.trj_array[i], self._ds_traj.trj_array[i]],
                         wait=True,
                     )
-                    time.sleep(exposure)
+                    self.acquire_data()
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
 
+            caput_many([EpicsConfig["horizontal"].value, EpicsConfig["ds_mirror"].value], [current_horiz, current_ds], wait=True)
+
         elif self._us_traj is not None and self._ds_traj is None:
+            current_horiz = caget(EpicsConfig["horizontal"].value)
+            current_us = caget(EpicsConfig["us_mirror"].value)
+
             # Move to start positions
             caput_many(
                 [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value], [self._horiz_traj.trj_array[0], self._us_traj.trj_array[0]], wait=True
             )
             time.sleep(0.2)
+
+            # Collect first step
+            self.acquire_data()
 
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
@@ -189,10 +211,16 @@ class ScanningController(QObject):
                         [self._horiz_traj.trj_array[i], self._us_traj.trj_array[i]],
                         wait=True,
                     )
-                    time.sleep(exposure)
+                    self.acquire_data()
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
+
+            caput_many([EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value], [current_horiz, current_us], wait=True)
         else:
+            current_horiz = caget(EpicsConfig["horizontal"].value)
+            current_us = caget(EpicsConfig["us_mirror"].value)
+            current_ds = caget(EpicsConfig["ds_mirror"].value)
+
             # Move to start positions
             caput_many(
                 [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value, EpicsConfig["ds_mirror"].value],
@@ -201,6 +229,9 @@ class ScanningController(QObject):
             )
             time.sleep(0.2)
 
+            # Collect first step
+            self.acquire_data()
+
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
                     caput_many(
@@ -208,9 +239,15 @@ class ScanningController(QObject):
                         [self._horiz_traj.trj_array[i], self._us_traj.trj_array[i], self._ds_traj.trj_array[i]],
                         wait=True,
                     )
-                    time.sleep(exposure)
+                    self.acquire_data()
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
+
+            caput_many(
+                [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value, EpicsConfig["ds_mirror"].value],
+                [current_horiz, current_us, current_ds],
+                wait=True,
+            )
 
         time.sleep(0.5)
 

@@ -55,6 +55,8 @@ class EpicsConfig(Enum):
     ds_mirror = "13IDD:m103"
     us_mirror = "13IDD:m102"
     horizontal = "13IDD:m98"
+    detector_acquire = "13IDD:userStringSeq11.PROC"
+    detector_exposure = "13EIG2_9M:cam1:AcquireTime"
     stop_pvs = ["13IDD:Auto1:allstop.VAL", "13IDD_Linux:allstop.VAL", "13IDD_DAC_XPS16:allstop.VAL"]
 
 
