@@ -28,7 +28,7 @@
 import threading
 import time
 
-from epics import caget, caput
+from epics import caget, caput, caput_many
 from qtpy.QtCore import QObject, Signal
 
 from revolv.model import EpicsConfig, LineTrajectory, MainModel
@@ -158,31 +158,56 @@ class ScanningController(QObject):
         num_frames = len(self._horiz_traj.trj_array)
 
         if self._ds_traj is not None and self._us_traj is None:
+            # Move to start positions
+            caput_many(
+                [EpicsConfig["horizontal"].value, EpicsConfig["ds_mirror"].value], [self._horiz_traj.trj_array[0], self._ds_traj.trj_array[0]], wait=True
+            )
+            time.sleep(0.2)
+
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
-                    horiz_pos = self._horiz_traj.trj_array[i]
-                    ds_pos = self._ds_traj.trj_array[i]
-                    print(f"Moving horiz to {horiz_pos}, ds to {ds_pos}")
+                    caput_many(
+                        [EpicsConfig["horizontal"].value, EpicsConfig["ds_mirror"].value],
+                        [self._horiz_traj.trj_array[i], self._ds_traj.trj_array[i]],
+                        wait=True,
+                    )
                     time.sleep(exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
 
         elif self._us_traj is not None and self._ds_traj is None:
+            # Move to start positions
+            caput_many(
+                [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value], [self._horiz_traj.trj_array[0], self._us_traj.trj_array[0]], wait=True
+            )
+            time.sleep(0.2)
+
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
-                    horiz_pos = self._horiz_traj.trj_array[i]
-                    us_pos = self._us_traj.trj_array[i]
-                    print(f"Moving horiz to {horiz_pos}, us to {us_pos}")
+                    caput_many(
+                        [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value],
+                        [self._horiz_traj.trj_array[i], self._us_traj.trj_array[i]],
+                        wait=True,
+                    )
                     time.sleep(exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
         else:
+            # Move to start positions
+            caput_many(
+                [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value, EpicsConfig["ds_mirror"]],
+                [self._horiz_traj.trj_array[0], self._us_traj.trj_array[0], self._ds_traj.trj_array[0]],
+                wait=True,
+            )
+            time.sleep(0.2)
+
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
-                    horiz_pos = self._horiz_traj.trj_array[i]
-                    us_pos = self._us_traj.trj_array[i]
-                    ds_pos = self._ds_traj.trj_array[i]
-                    print(f"Moving horiz to {horiz_pos}, us to {us_pos}, ds to {ds_pos}")
+                    caput_many(
+                        [EpicsConfig["horizontal"].value, EpicsConfig["us_mirror"].value, EpicsConfig["ds_mirror"]],
+                        [self._horiz_traj.trj_array[i], self._us_traj.trj_array[i], self._ds_traj.trj_array[i]],
+                        wait=True,
+                    )
                     time.sleep(exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
