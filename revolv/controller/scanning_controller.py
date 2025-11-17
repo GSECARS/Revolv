@@ -156,6 +156,11 @@ class ScanningController(QObject):
             self.abort()
             return None
 
+        # Move the photodiode out
+        if caget(EpicsConfig["photodiode"].value) == 0:
+            caput(EpicsConfig["photodiode"].value, 1)
+            time.sleep(2)
+
         # Set exposure time
         caput(EpicsConfig["detector_exposure"].value, exposure, wait=True)
 
