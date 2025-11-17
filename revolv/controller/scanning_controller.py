@@ -133,12 +133,10 @@ class ScanningController(QObject):
         else:
             self.abort()
 
-    def acquire_data(self) -> None:
+    def acquire_data(self, exposure) -> None:
         # Collect
         caput(EpicsConfig["detector_acquire"].value, 1, wait=True)
-        while caget(EpicsConfig["detector_armed"].value):
-            time.sleep(0.1)
-            continue
+        time.sleep(exposure + 0.2)
 
     def _collect_step(self, exposure: float, start: float, end: float, step: float) -> None:
         if self._horiz_traj is None:
@@ -178,7 +176,7 @@ class ScanningController(QObject):
             time.sleep(0.2)
 
             # Collect first step
-            self.acquire_data()
+            self.acquire_data(exposure=exposure)
 
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
@@ -187,7 +185,7 @@ class ScanningController(QObject):
                         [self._horiz_traj.trj_array[i], self._ds_traj.trj_array[i]],
                         wait=True,
                     )
-                    self.acquire_data()
+                    self.acquire_data(exposure=exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
 
@@ -204,7 +202,7 @@ class ScanningController(QObject):
             time.sleep(0.2)
 
             # Collect first step
-            self.acquire_data()
+            self.acquire_data(exposure=exposure)
 
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
@@ -213,7 +211,7 @@ class ScanningController(QObject):
                         [self._horiz_traj.trj_array[i], self._us_traj.trj_array[i]],
                         wait=True,
                     )
-                    self.acquire_data()
+                    self.acquire_data(exposure=exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
 
@@ -232,7 +230,7 @@ class ScanningController(QObject):
             time.sleep(0.2)
 
             # Collect first step
-            self.acquire_data()
+            self.acquire_data(exposure=exposure)
 
             for i in range(num_frames):
                 if not self._model.scanning.aborted:
@@ -241,7 +239,7 @@ class ScanningController(QObject):
                         [self._horiz_traj.trj_array[i], self._us_traj.trj_array[i], self._ds_traj.trj_array[i]],
                         wait=True,
                     )
-                    self.acquire_data()
+                    self.acquire_data(exposure=exposure)
                     self.frame_changed.emit(f"{i + 1}/{num_frames}")
                     self._update_elapsed_time()
 
