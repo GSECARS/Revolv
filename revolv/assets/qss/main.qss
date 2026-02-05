@@ -1,0 +1,56 @@
+
+QPushButton {
+    background-color: #f5d6c4;
+    border: 2px solid #f5d6c4;
+    border-radius: 4px;
+    color: #889e99;
+    font-family: "Calibri";
+    font-size: 14px;
+    padding: 5px 15px;
+}
+
+QPushButton:focus {
+    background-color: #c29d87;
+    border: 2px solid #c29d87;
+    color: #323336;
+}
+
+QPushButton:hover {
+    background-color: #edc59d;
+    border-color: #edc59d;
+    color: #323336;
+    margin: 1px;
+}
+
+QPushButton:pressed {
+    background-color: #c29d87;
+    border-color: #c29d87;
+    color: #323336;
+    margin: 2px;
+}
+
+QLabel {
+    color: #ffffff;
+    font-size: 12px;
+    font-family: "Calibri";
+    font-weight: bold;
+}
+
+#collect-abort-button {
+    background-color: #edcf9d;
+    border: 2px solid #edcf9d;
+    color: #323336;
+    font-size: 16px;
+    padding: 1px 5px;
+}
+
+#collect-abort-button:hover, #collect-abort-button:focus, #collect-abort-button:pressed {
+    background-color: #d1b68a;
+    border-color: #d1b68a;
+}
+
+#lbl-status {
+    color: #99232f;
+    font-size: 28px;
+    margin: 0 10px;
+}
