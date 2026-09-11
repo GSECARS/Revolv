@@ -1,30 +1,4 @@
-#!/usr/bin/python3
-# ----------------------------------------------------------------------------------
-# Project: Revolv
-# File: revolv/model/line_trajectory_model.py
-# ----------------------------------------------------------------------------------
-# Purpose:
-# This is the Line Trajectory model of the Revolv application. It is responsible for
-# generating points along a straight line in 1D, 2D, or 3D space.
-# ----------------------------------------------------------------------------------
-# Author: Christofanis Skordas
-#
-# Copyright (c) 2025 GSECARS, The University of Chicago
-# Copyright (c) 2025 NSF SEES, Synchrotron Earth and Environmental Science
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-# ----------------------------------------------------------------------------------
+# SPDX-License-Identifier: MIT
 
 from dataclasses import dataclass, field
 from typing import Sequence
