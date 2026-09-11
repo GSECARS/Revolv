@@ -21,17 +21,17 @@ classifiers = [
 ]
 requires-python = "==3.14.*"
 dependencies = [
-    "gsewidgets>=0.0.2",
     "pyepics>=3.5.8",
-    "pyqt6>=6.10.0",
     "pyshortcuts>=1.9.5",
-    "qtpy>=2.4.3",
+    "wxpython>=4.3.1",
+    "wxutils>=2026.3.0",
 ]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.14.4",
-    "ty>=0.0.1a26",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "ruff>=0.16.7",
 ]
 
 [project.scripts]
