@@ -2,21 +2,22 @@
 
 [project]
 name = "revolv"
-version = "0.1.0"
-maintainers = [
-    {name = "Christofanis Skordas", email = "55315750+skordaschristofanis@users.noreply.github.com"}
-]
-description = ""
+dynamic = ["version"]
+authors = [ {name = "Christofanis Skordas", email = "skordasc@uchicago.edu"} ]
+maintainers = [ {name = "Christofanis Skordas", email = "skordasc@uchicago.edu"} ]
+description = "Revolv is a GUI Python application that helps with synchronous data collection of X-ray scanning the laser heated spot in the Diamond Anvil Cell."
 readme = {file = "README.md", content-type = "text/markdown"}
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICENSE.txt"]
 classifiers = [
     "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
-    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.14",
-    "License :: OSI Approved :: MIT License"
+    "Topic :: Scientific/Engineering",
+    "Topic :: Utilities",
 ]
 requires-python = "==3.14.*"
 dependencies = [
@@ -37,17 +38,19 @@ dev = [
 revolv = "revolv:main"
 
 [project.urls]
-Homepage = "https://github.com/GSECARS/Revolv"
+Homepage = "https://github.com/gsecars/revolv"
+Issues = "https://github.com/gsecars/revolv/issues"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["revolv"]
-include = [
-  "/revolv/assets/icons/revolv.png"
-]
+include = ["/revolv/assets/*.png"]
+
+[tool.hatch.version]
+source = "vcs"
 
 [tool.ruff]
 exclude = [
@@ -57,7 +60,6 @@ exclude = [
     ".pytype",
     ".ruff_cache",
     ".venv",
-    ".vscode",
     "build",
     "dist",
 ]
