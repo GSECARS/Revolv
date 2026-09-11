@@ -20,11 +20,6 @@ Thumbs.db
 Desktop.ini
 *~
 
-# Editors
-.idea/
-.vscode/
-*.code-workspace
-
 # Tools
 .ruff_cache/
 .pytest_cache/
