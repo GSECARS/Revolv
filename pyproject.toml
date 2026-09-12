@@ -27,6 +27,9 @@ dependencies = [
     "wxutils>=2026.3.0",
 ]
 
+[tool.uv.sources]
+pyshortcuts = { path = "../pyshortcuts", editable = true }
+
 [dependency-groups]
 dev = [
     "pre-commit>=4.6.2",
@@ -47,7 +50,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["revolv"]
-include = ["/revolv/assets/*.png"]
+include = ["/revolv/assets/**"]
 
 [tool.hatch.version]
 source = "vcs"
