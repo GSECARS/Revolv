@@ -24,11 +24,12 @@ dependencies = [
     "pyepics>=3.5.8",
     "pyshortcuts>=1.9.5",
     "wxpython>=4.3.1",
-    "wxutils>=2026.3.0",
+    "wxutils",
 ]
 
 [tool.uv.sources]
 pyshortcuts = { path = "../pyshortcuts", editable = true }
+wxutils = { path = "../wxutils", editable = true }
 
 [dependency-groups]
 dev = [
