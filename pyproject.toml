@@ -22,7 +22,7 @@ classifiers = [
 requires-python = "==3.14.*"
 dependencies = [
     "pyepics>=3.5.8",
-    "pyshortcuts>=1.9.5",
+    "pyshortcuts",
     "wxpython>=4.3.1",
     "wxutils",
 ]
