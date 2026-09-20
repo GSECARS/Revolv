@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 from importlib.metadata import version
 from pathlib import Path
 
-from wxutils import AppConfig, WxApplication, add_shortcut_arguments, handle_shortcut_arguments
+from wxutils import AppConfig, WxApplication, add_application_arguments, handle_shortcut_arguments
 
 from revolv.controller.main_controller import MainController
 from revolv.view import MainView
@@ -23,17 +23,8 @@ APP_CONFIG = AppConfig(
 def make_parser():
     """Build the revolv command line parser."""
     parser = ArgumentParser("revolv")
-    add_shortcut_arguments(parser)
+    add_application_arguments(parser)
     return parser
-
-
-def start_ui():
-    """Construct and start the GUI."""
-    app = WxApplication(APP_CONFIG, False)
-    view = MainView(version=__version__)
-    _controller = MainController(view=view)
-
-    app.run(view)
 
 
 def main() -> None:
@@ -44,4 +35,8 @@ def main() -> None:
     if handle_shortcut_arguments(parser, args, APP_CONFIG):
         return
 
-    start_ui()
+    app = WxApplication(APP_CONFIG, False)
+    view = MainView(version=__version__, with_inspect=args.inspect)
+    _controller = MainController(view=view)
+
+    app.run(view)

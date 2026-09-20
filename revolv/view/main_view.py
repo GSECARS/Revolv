@@ -6,8 +6,10 @@ import wx
 class MainView(wx.Frame):
     """Implements the main application view."""
 
-    def __init__(self, version: str) -> None:
+    def __init__(self, version: str, with_inspect: bool = False) -> None:
         super(MainView, self).__init__(parent=None, id=wx.ID_ANY, title=f"Revolv {version}")
+
+        self.with_inspect = with_inspect
 
         self._create_menu()
 
@@ -25,3 +27,12 @@ class MainView(wx.Frame):
             lambda event: self.Close(),
             id=wx.ID_EXIT,
         )
+
+        if self.with_inspect:
+            inspect_item = file_menu.Append(wx.ID_ANY, "Show wxPython Inspector\tCtrl+I", "Debug wxPython App")
+            self.Bind(wx.EVT_MENU, self._show_inspection_tool, inspect_item)
+
+    @staticmethod
+    def _show_inspection_tool(event=None) -> None:
+        """Shows the wx inspection tool."""
+        wx.GetApp().ShowInspectionTool().Show()
