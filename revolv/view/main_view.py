@@ -3,6 +3,7 @@
 import wx
 from wxutils import FlatPanel
 
+from revolv.view.setup_view import SetupView
 from revolv.view.status_view import StatusView
 
 
@@ -19,6 +20,7 @@ class MainView(wx.Frame):
         # Panels
         self._flat_panel = FlatPanel(self)
         self.status_view = StatusView(self._flat_panel)
+        self.setup_view = SetupView(self._flat_panel)
 
         # Layout
         self._layout()
@@ -42,6 +44,7 @@ class MainView(wx.Frame):
 
     def _layout(self) -> None:
         layout = wx.BoxSizer(wx.VERTICAL)
+        layout.Add(self.setup_view, 0, wx.EXPAND | wx.ALL, 12)
         layout.Add(self.status_view, 0, wx.EXPAND | wx.ALL, 12)
         self._flat_panel.SetSizer(layout)
 
