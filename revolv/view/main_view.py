@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 
 import wx
-from wxutils import FlatPanel, FlatConfirmDialog
+from wxutils import FlatConfirmDialog, FlatPanel
 
 from revolv.view.control_view import ControlView
 from revolv.view.setup_view import SetupView
@@ -16,8 +16,6 @@ class MainView(wx.Frame):
 
         self.with_inspect = with_inspect
 
-        self._create_menu()
-
         # Panels
         self._flat_panel = FlatPanel(self)
         self.status_view = StatusView(self._flat_panel)
@@ -27,7 +25,8 @@ class MainView(wx.Frame):
         # Bind events
         self.Bind(wx.EVT_CLOSE, self._close_event_handler)
 
-        # Layout
+        # Configuration
+        self._create_menu()
         self._layout()
 
     def _create_menu(self) -> None:
